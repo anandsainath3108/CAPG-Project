@@ -1,213 +1,233 @@
 package com.capg.cms.presentation;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Random;
 import java.util.Scanner;
 
-import com.capg.cms.dto.Account;
-import com.capg.cms.dto.Transaction;
+import com.capg.cms.entity.Account;
+import com.capg.cms.entity.Transaction;
+import com.capg.cms.exception.AccountException;
 import com.capg.cms.service.CustomerServiceImpl;
-import com.capg.cms.service.ICustomerService;
-
-
 
 public class Client {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, AccountException {
 		// TODO Auto-generated method stub
-		CustomerServiceImpl service = new CustomerServiceImpl();		
-		while(true)
-		{
-			
-		System.out.println("------------------------------------------------------------------\n");
-		System.out.println("welcome to UTI Bank Limited\n");
-		System.out.println("------------------------------------------------------------------");
-		System.out.println("1. Create Account");
-		System.out.println("2. Show Balance");
-		System.out.println("3. Deposit");
-		System.out.println("4. Withdraw");
-		System.out.println("5. Fund Transfer");
-		System.out.println("6. Print Transaction");
-		System.out.println("7. Exit");
+		CustomerServiceImpl service = new CustomerServiceImpl();
+		while (true) {
 
-		Scanner sc = new Scanner(System.in);
-		int Choice = sc.nextInt();
+			System.out.println("------------------------------------------------------------------\n");
+			System.out.println("Welcome to UTI Bank Limited\n");
+			System.out.println("------------------------------------------------------------------");
+			System.out.println("1. Create Account");
+			System.out.println("2. Show Balance");
+			System.out.println("3. Deposit");
+			System.out.println("4. Withdraw");
+			System.out.println("5. Fund Transfer");
+			System.out.println("6. Print Transaction");
+			System.out.println("7. Exit");
 
-		switch (Choice) 
-		{
-		case 1: 
-			Account bean = new Account();
-			//Validating Name
-			String name;
-			do
-			{
-			System.out.println("Enter Your Name");
-			name = sc.next();
-			}while(!service.validateName(name) );
-			bean.setMobileNo(name);
-			// Validating E-mail-ID
-			String email;
-			do
-			{
-			System.out.println("Enter your email id");
-			email = sc.next();
-			}while(!service.isValidEmailAddress(email));
-			bean.setEmailId(email);
-			// Address
-			System.out.println("Enter your Address");
-			String addr = sc.next();
-			bean.setAddr(addr);
-			
-			//ID Proof Number
-			String id;
-			do
-			{
-			System.out.println("Enter an ID Proof Number(10 digit id)");
-			id = sc.next();
-			}
-			while(!service.validateId(id));
-			bean.setIdProofNo(id);
-			
-			//Validating Mobile Number
-			String mobile;
-			do
-			{
-			System.out.println("Enter your Mobile Number");
-			mobile = sc.next();
-			}
-			while(!service.validateNumber(mobile) );
-			bean.setMobileNo(mobile);
-			
-			//Validating Age
-			int age;
-			do
-			{
-			System.out.println("Enter your age");
-			age = sc.nextInt();
-			}
-			while(!service.validateAge(age));
-			bean.setAge(age);
-			
-			//Creating AccNo
-			Random rnd = new Random();
-			int accNo = 100000 + rnd.nextInt(900000);
-			Long accountNo = (long) accNo;
-			System.out.println(accountNo);
-			bean.setAccountNo(accountNo);
-			
-			//Creating Pin
-			/*Random rnd2 = new Random();
-			int pin1 = 1000 + rnd.nextInt(9000);
-			String pin = (String) pin1; 
-			System.out.println(pin);
-			bean.setPassword(pin);*/
-			
-			//Validating Balance
-			double balance;
-			do
-			{
-			System.out.println("Enter Account opening balance");
-			balance = sc.nextInt();
-			}
-			while(!service.validateBalance(balance));
-			bean.setBalance(balance);
-			
-			System.out.println(bean);
-			//handing objects to bean object after taking input from user
-			long a = bean.getAccountNo();
-			boolean isAdded = service.addCustomer(bean);
-			break;
-		
-		case 2:
-			System.out.println("Enter Account number and pin to show balance");
-			System.out.println("--------------------------------------------");
-			System.out.println("enter account number");
-			long accountNo2 = sc.nextLong();
-			
-			Account c = service.displayAccount(accountNo2);
-			System.out.println("Rs. " + c.getBalance() + "added to account number " + c.getAccountNo());
+			Scanner sc = new Scanner(System.in);
+			int Choice = sc.nextInt();
+
+			switch (Choice) {
+			case 1:
+				Account bean = new Account();
+
 				
-			break;
-		
-		case 3:
-			Account c11 = new Account();
-			System.out.println("enter account number and amount to be deposited");
-			
-			System.out.println("enter account no");
-			long accountNo3 = sc.nextLong();
-			
-			System.out.println("enter amount to be deposited");
-			double depositAmount = sc.nextDouble();
-			
-			Customer ac = service.deposit(accountNo3, depositAmount);
-			System.out.println("Balance for account number "+ ac.getAccountNo() + " is now: " + ac.getBalance());
-			
-			service.printTransactions(ac);
-			break;
-			
-		case 4:
-			System.out.println("enter account number and pin to proceed");
-			
-			System.out.println("enter account number");
-			long accountNo4 = sc.nextLong();
+				// Validating Name
+				String name;
+				do {
+					System.out.println("Enter Your Name");
+					name = sc.next();
+				} while (!service.validateName(name));
+				bean.setName(name);
 
-			System.out.println("enter pin");
-			int pin4 = sc.nextInt();
-			
-			System.out.println("enter amount to be withdrawn");
-			double withdrawAmount = sc.nextDouble();
-			
-			Customer c8 = service.withdraw(accountNo4 , pin4 , withdrawAmount, sb);
-			System.out.println("Balance for account number "+ c8.getAccountNo() + " is now: " + c8.getBalance());
-			break;
+				
+				// Validating E-mail-ID
+				String email;
+				do {
+					System.out.println("Enter your email id");
+					email = sc.next();
+				} while (!service.isValidEmailAddress(email));
+				bean.setEmailId(email);
 
-		case 5:
-			System.out.println("enter your account number");
-			long accountNo5 = sc.nextLong();
+				
+				// Address
+				System.out.println("Enter your Address");
+				String addr = sc.next();
+				bean.setAddr(addr);
+
+				
+				// ID Proof Number
+				String id;
+				do {
+					System.out.println("Enter an ID Proof Number(10 digit id)");
+					id = sc.next();
+				} while (!service.validateId(id));
+				bean.setIdProofNo(id);
+
+				
+				// Validating Mobile Number
+				String mobile;
+				do {
+					System.out.println("Enter your Mobile Number");
+					mobile = sc.next();
+				} while (!service.validateNumber(mobile));
+				bean.setMobileNo(mobile);
+
+				
+				// Validating Age
+				Integer age;
+				do {
+					System.out.println("Enter your age");
+					age = sc.nextInt();
+				} while (!service.validateAge(age));
+				bean.setAge(age);
+
+				
+				// Creating AccNo
+				Random rnd = new Random();
+				Integer accNo = 100000 + rnd.nextInt(900000);
+				Long accountNo = (long) accNo;
+				System.out.println(accountNo);
+				bean.setAccountNo(accountNo);
+
+				
+				// Validating Username
+				String username;
+				System.out.println("Enter your Mobile Number");
+				username = sc.next();
+				bean.setUsername(username);
+
+				
+				// Validating Password
+				String password, passwordVer;
+				do {
+					System.out.println("Create your Password");
+					password = sc.next();
+					System.out.println("Re-Enter your Password");
+					passwordVer = sc.next();
+				} while (!service.validatePassword(password, passwordVer));
+				bean.setPassword(password);
+
+				
+				// Validating Balance
+				double balance;
+				do {
+					System.out.println("Enter Account opening balance");
+					balance = sc.nextInt();
+				} while (!service.validateBalance(balance));
+				bean.setBalance(balance);
+
+				System.out.println(bean);
+
+				
+				// handing objects to bean object after taking input from user
+				Long a = bean.getAccountNo();
+				System.out.println("Your Account Number is:" + a);
+				boolean isAdded = service.addCustomer(bean);
+				break;
+
 			
-			System.out.println("enter your pin");
-			int pin5 = sc.nextInt();
+			case 2:
+				System.out.println("Enter Account number and Password to show balance");
+				System.out.println("--------------------------------------------");
+				System.out.println("enter account number");
+				Long accountNo2 = sc.nextLong();
+				
+				System.out.println("Enter your Password");
+				String password2 = sc.next();
+
+				Account c = service.displayAccount(accountNo2);
+				System.out.println( "Availaible balance in "+c.getAccountNo()+" is Rs."+c.getBalance());
+
+				break;
+
 			
-			System.out.println("enter account number to which you want to transfer amount");
-			long accountNoTransfer = sc.nextLong();
+			case 3:
+				Transaction transaction3 = new Transaction();
+				System.out.println("Enter Account Number, Password and Amount to be deposited");
+
+				System.out.println("Enter your Account Number");
+				Long accountNo3 = sc.nextLong();
+
+				System.out.println("Enter your Password");
+				String password3 = sc.next();
+
+				System.out.println("Enter the amount to be deposited");
+				Double depositAmount = sc.nextDouble();
+
+				Transaction depositTransaction = service.deposit(accountNo3, depositAmount, transaction3);
+				System.out.println("Transaction Details are:" + depositTransaction);
+
+				break;
+
 			
-			System.out.println("enter amount");
-			double amountTransfer = sc.nextDouble();
+			case 4:
+				Transaction transaction4 = new Transaction();
+				System.out.println("Enter Account Number, Password and Amount to be Withdrawn");
+
+				System.out.println("Enter your Account Number");
+				Long accountNo4 = sc.nextLong();
+
+				System.out.println("Enter your Password");
+				String password4 = sc.next();
+
+				System.out.println("Enter the amount to be Withdrawn");
+				Double withdrawAmount = sc.nextDouble();
+
+				Transaction withdrawTransaction = service.withdraw(accountNo4, withdrawAmount, transaction4);
+				System.out.println("Transaction Details are:" + withdrawTransaction);
+				break;
+
+			
+			case 5:
+				Transaction transaction5 = new Transaction();
+				System.out.println(
+						"Enter Debit Account Number, Credit Account Number Password and Amount to be Transferred");
+
+				System.out.println("Enter Debit Account Number");
+				Long accountNo5Dr = sc.nextLong();
+
+				System.out.println("Enter Debit Account Number");
+				Long accountNo5Cr = sc.nextLong();
+
+				System.out.println("Enter your Password");
+				String password5 = sc.next();
+
+				System.out.println("Enter the amount to be Transferred");
+				Double transferAmount = sc.nextDouble();
+
+				Transaction transferTransaction = service.fundTransfer(accountNo5Cr, accountNo5Dr, transferAmount,
+						transaction5);
+				System.out.println("Transaction Details are:" + transferTransaction);
+				break;
+
+			
+			case 6:
+				System.out.println("enter account number and pin to print transactions");
+
+				System.out.println("enter your account number");
+				long accountNo6 = sc.nextLong();
+
+				System.out.println("enter your pin");
+				int password6 = sc.nextInt();
+				break;
 			
 			
-			Customer c2 = service.fundTransfer(accountNo5 , pin5 , accountNoTransfer , amountTransfer, sb, sbT);
-			//System.out.println("amount transfered to: " + c2.getAccountNo());
-			System.out.println("amount transfered from : " + c2.getAccountNo() + " balance = " + c2.getBalance());
-			//System.out.println("balance: " + c2.getBalance());
-			
-			break;
-			
-		case 6:
-			System.out.println("enter account number and pin to print transactions");
-			
-			System.out.println("enter your account number");
-			long accountNo6 = sc.nextLong();
-			
-			System.out.println("enter your pin");
-			int pin6 = sc.nextInt();
-		
-		//	Customer c3 = service.printTransactions(accountNo6 , pin6);
-			
-			
-			break;
-		case 7:
-			System.out.println("==================================================================\n");
-			System.out.println("Thank You for UTI Bank Limited\n");
-			System.out.println("==================================================================");
-			System.exit(0);
-			break;
-		default:
-			break;
+			case 7:
+				System.out.println("==================================================================\n");
+				System.out.println("Thank You for using UTI Bank Limited\n");
+				System.out.println("==================================================================");
+			    sc.close();
+				System.exit(0);
+				break;
+			default:
+				break;
+			}
+
 		}
 
-	}
-		
 	}
 
 }

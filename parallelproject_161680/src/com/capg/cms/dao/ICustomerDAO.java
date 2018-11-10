@@ -2,8 +2,8 @@ package com.capg.cms.dao;
 
 import java.util.List;
 
-import com.capg.cms.dto.Account;
-import com.capg.cms.dto.Transaction;
+import com.capg.cms.entity.Account;
+import com.capg.cms.entity.Transaction;
 import com.capg.cms.exception.AccountException;
 
 public interface ICustomerDAO {

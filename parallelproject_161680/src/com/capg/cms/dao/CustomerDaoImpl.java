@@ -2,22 +2,52 @@ package com.capg.cms.dao;
 
 import java.util.List;
 
-import com.capg.cms.dto.Account;
-import com.capg.cms.dto.Transaction;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
+
+import com.capg.cms.entity.Account;
+import com.capg.cms.entity.Transaction;
 import com.capg.cms.exception.AccountException;
+import com.capg.cms.utility.JPAUtil;
 
 public class CustomerDaoImpl implements ICustomerDAO {
-
+	EntityManager entityManager = null;
 	@Override
-	public boolean addCustomer(Account a) throws AccountException {
+	public boolean addCustomer(Account account1) throws AccountException {
 		// TODO Auto-generated method stub
-		return false;
+		boolean flag = false;
+		try {
+			entityManager = JPAUtil.getEntityManager();
+			entityManager.getTransaction().begin();
+			entityManager.persist(account1);
+			entityManager.getTransaction().commit();
+			flag = true;
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			// TODO: Log to file
+			throw new AccountException(e.getMessage());
+		} finally {
+			entityManager.close();
+		}
+      return flag;
 	}
 
 	@Override
 	public Account displayAccount(Long accountNo) throws AccountException {
 		// TODO Auto-generated method stub
-		return null;
+		Account account = null;
+		try {
+			entityManager = JPAUtil.getEntityManager();
+			entityManager.getTransaction().begin();
+			account = entityManager.find(Account.class, accountNo);
+			return account;
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			// TODO: Log to file
+			throw new AccountException(e.getMessage());
+		} finally {
+			entityManager.close();
+		}
 	}
 
 	@Override
