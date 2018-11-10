@@ -13,4 +13,5 @@ public interface ICustomerDAO {
 	public Transaction withdraw(Long accountNo , Double withdrawAmount, Transaction transaction) throws AccountException;
 	public Transaction fundTransfer(Long accountNoCr, Long AccountNoDr, Double transferAmt, Transaction transaction) throws AccountException;
 	public List<Transaction> printTransactions(Long accountNo) throws AccountException;
+	public Transaction addTransaction(Transaction transaction) throws AccountException;
 }

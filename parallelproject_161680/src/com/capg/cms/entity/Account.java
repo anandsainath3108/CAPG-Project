@@ -8,7 +8,8 @@ import javax.persistence.Id;
 @Entity
 public class Account {
 	@Id
-	private Long accountNo;private String name;
+	private Long accountNo;
+	private String name;
 	private String idProofNo;
 	private String mobileNo;
 	private String emailId;

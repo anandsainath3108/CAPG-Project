@@ -24,27 +24,27 @@ public class CustomerServiceImpl implements ICustomerService{
 	@Override
 	public Transaction deposit(Long accountNo, Double depositAmount, Transaction transaction) throws AccountException {
 		// TODO Auto-generated method stub
-		return null;
+		return dao.deposit(accountNo, depositAmount, transaction);
 	}
 
 	@Override
 	public Transaction withdraw(Long accountNo, Double withdrawAmount, Transaction transaction)
 			throws AccountException {
 		// TODO Auto-generated method stub
-		return null;
+		return dao.withdraw(accountNo, withdrawAmount, transaction);
 	}
 
 	@Override
 	public Transaction fundTransfer(Long accountNoCr, Long AccountNoDr, Double transferAmt, Transaction transaction)
 			throws AccountException {
 		// TODO Auto-generated method stub
-		return null;
+		return dao.fundTransfer(accountNoCr, AccountNoDr, transferAmt, transaction);
 	}
 
 	@Override
 	public List<Transaction> printTransactions(Long accountNo) throws AccountException {
 		// TODO Auto-generated method stub
-		return null;
+		return dao.printTransactions(accountNo);
 	}
 
 
@@ -113,7 +113,7 @@ public boolean validateBalance(double balance) throws AccountException {
 
 
 //Validating Password
-public boolean validatePassword(String password, String passwordVer) {
+public boolean validatePassword(String password, String passwordVer) throws AccountException {
 	// TODO Auto-generated method stub
 	boolean flag = false;
 	if(password.length() >= 8 && password.equals(passwordVer)) {
